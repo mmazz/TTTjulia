@@ -1,0 +1,22 @@
+parser.csv es la data cruda.
+
+A eso se le aplica el KGS_filtered.py el cual simplemente agarra la data de interes quedandonos en casos genericos.
+Solo se queda con tamaños de tablero comunes.
+
+Al CSV que sale se le aplica KGS_filterd_julia.py el cual este ya trata la base de datos para
+los experimentos que se quieren en una primera instancia.
+
+Teniendo la base de datos usamos diferentes archivos de julia para generarnos los diferentes arichivos
+CSV de inforamcion de trueskill.
+
+Con estos CSV ya de informacion de trueskill vuelvo a levantar con python para realizar las diferentes figuras.
+
+Julia:
+TTT_datos.jl corre simplemente TTT
+beta_gamma.jl va a realizar una matriz de log evidencia para diferentes betas y gammas
+
+Python:
+PlayerSigma.py genera la evolucion de mu y de sigma para algunos jugadores en funcion del numero de partidas
+Dan.py genera la evolcuion de rango oficial.
+handicap19.py genera la figura de estimacion  de handicap
+
