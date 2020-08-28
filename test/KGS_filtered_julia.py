@@ -20,6 +20,8 @@ import pickle
 reload(thM)
 
 df = pd.read_csv('./KGS_filtered.csv')
+#df = df[:50000]  # por si solo nos quedamos con una base reducida
+
 print(df.shape)
 df = df[(~df.white.str.contains('bot',case=False, na=False))&(~df.black.str.contains('bot',case=False, na=False))]
 df=df[df.white!=df.black]
@@ -27,13 +29,26 @@ df=df[df.white!=df.black]
 #Nos quedamos con tamaño 19
 df = df[df.width==19]
 
-# nos quedamos con año o año y mes
-#df['date'] = df['started'].apply(lambda row: row[0:7])
-df['date'] = df['started'].apply(lambda row: row[0:4])
+# Si queremos armar baches por meses
+df['date'] = df['started'].apply(lambda row: row[0:7])
+df = df[df.date.str.contains('2007') | df.date.str.contains('2008')]
+print(df.date.head())
+fecha = 0
+dates = []
+count = 0
+for i in df.index:
+    if df.loc[i].date == fecha:
+        dates.append(count)
+    else:
+        print(count)
+        count += 1
+        dates.append(count)
+    fecha = df.loc[i].date
+df['date'] = dates
 
-
-# nos quedamos con un solo año
-df = df[df.date.str.contains('2007')|df.date.str.contains('2008')|df.date.str.contains('2009')|df.date.str.contains('2010')]
+# si queremos armar baches por años
+#df['date'] = df['started'].apply(lambda row: row[0:4])
+#df = df[df.date.str.contains('2007')|df.date.str.contains('2008')|df.date.str.contains('2009')|df.date.str.contains('2010')]
 df['date'] = df.date.apply(lambda x: int(x))
 # agrego cero a los handicaps nulos
 df.handicap = df.handicap.apply(lambda x: x if x>=2 else 0)
@@ -46,6 +61,6 @@ df = df[['id', 'black', 'white',  'black_win', 'handicap', 'komi',
 df = df.sort_values(by=['date', 'id'])
 df = df.reset_index()
 print(df.shape)
-#df = df[:10]
-#df.to_csv("./KGS_filtered_julia_reducido.csv", index=False)
-df.to_csv("./KGS_filtered_julia.csv", index=False)
+
+df.to_csv("./KGS_filtered_julia_meses.csv", index=False)
+#df.to_csv("./KGS_filtered_julia.csv", index=False)

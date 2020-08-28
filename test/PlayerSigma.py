@@ -13,14 +13,14 @@ import numpy as np
 import math
 
 
-path = '/home/mati/Storage/Tesis/AnalisisGo-Tesis/Julia/test/data_set.csv'
+path = '/home/mati/Storage/Tesis/AnalisisGo-Tesis/Julia/test/TTT_datos_reducido.csv'
 df = pd.read_csv(path)
 #%%
 Blanco = df[["white","w_mean","w_std" ]]
 Negro = df[["black","b_mean","b_std"]]
 
 df2 = pd.DataFrame( np.concatenate( (Blanco.values, Negro.values), axis=0 ) )
-df2.columns = [ 'Jugador', 'Mu', 'Sigma']
+df2.columns = ['Jugador', 'Mu', 'Sigma']
 df2.Mu = pd.to_numeric(df2.Mu)
 df2.Sigma = pd.to_numeric(df2.Sigma)
 df2 = df2.sort_values(by=["Jugador"])
@@ -33,6 +33,7 @@ JugadorMaxdf = df2[df2["Jugador"] == JugadorMax]
 JugadorMaxdf = JugadorMaxdf.reset_index()
 
 #%%
+paso_jugadores = 10  # antes era 100
 numeroJugadores = 10
 plt.figure(0)
 #xlimSigma = max(JugadorMaxdf.index)
@@ -47,7 +48,7 @@ for i in range(numeroJugadores): # me cambia el eje x, siempre se redefine.
     Jugador1df = Jugador1df.reset_index()
     index = Jugador1df.index.values
     Sigma = Jugador1df.Sigma.values
-    count += 100
+    count += paso_jugadores
     plt.plot(index,Sigma, label=f'Jugador {i}')
 
 plt.xlabel('Numero de Partidas')
@@ -70,7 +71,7 @@ for i in range(numeroJugadores): # me cambia el eje x, siempre se redefine.
     Jugador1df = Jugador1df.reset_index()
     index = Jugador1df.index.values
     Mu = Jugador1df.Mu.values
-    count += 100
+    count += paso_jugadores
     plt.plot(index,Mu, label=f'Jugador {i}')
 
     #fig1, ax1 = plt.subplots()
